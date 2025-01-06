@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "experiments"
+version = "0.1.0"
+description = ""
+authors = ["Ryan Partridge <rpartridge101@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pydantic = "^2.10.4"
+pydantic-settings = "^2.7.1"
+torch = { version = "^2.5.1", source = "pytorch" }
+torchvision = { version = "^0.20.1", source = "pytorch" }
+scikit-learn = "^1.6.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+pytest-cov = "^6.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu121"
+priority = "explicit"
+
+[tool.pytest.ini_options]
+addopts = "--cov-report term-missing --cov=velora tests/"
+filterwarnings = ["ignore::UserWarning"]

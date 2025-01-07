@@ -67,10 +67,9 @@ class PreNet(nn.Module):
     A PreNet module for the Base-LCM architecture.
 
     Args:
-        in_features (int): the number of input features (sonar_dim)
-        out_features (int): the number of output features (model_dim)
-        activation (str | ActivationEnum): the type of activation function
-        weight_norm (bool, optional): a flag to normalize the layers weights. Default is False
+        config (LinearProjectionConfig): a model containing the layers configuration settings
+        dtype (torch.dtype, optional): a custom torch datatype for all tensors. Default is None
+        device (torch.device, optional): the compute device to load tensors onto. Default is None
     """
 
     def __init__(
@@ -90,7 +89,7 @@ class PreNet(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass through the network."""
-        return self.fc(self.norm(x))
+        return self.fc(self.norm.normalize(x))
 
 
 class PostNet(nn.Module):
@@ -98,10 +97,9 @@ class PostNet(nn.Module):
     A PostNet module for the Base-LCM architecture.
 
     Args:
-        in_features (int): the number of input features (sonar_dim)
-        out_features (int): the number of output features (model_dim)
-        activation (str | ActivationEnum): the type of activation function
-        weight_norm (bool, optional): a flag to normalize the layers weights. Default is False
+        config (LinearProjectionConfig): a model containing the layers configuration settings
+        dtype (torch.dtype, optional): a custom torch datatype for all tensors. Default is None
+        device (torch.device, optional): the compute device to load tensors onto. Default is None
     """
 
     def __init__(
@@ -121,4 +119,4 @@ class PostNet(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass through the network."""
-        return self.norm(self.fc(x))
+        return self.norm.denormalize(self.fc(x))

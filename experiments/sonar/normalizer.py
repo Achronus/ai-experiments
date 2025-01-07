@@ -72,8 +72,7 @@ class SonarNormalizerConfig:
 
 class SonarNormalizer(nn.Module, FFTInterface):
     """
-    To perform efficient diffusion modeling, SONAR embeddings need to be
-    normalized. This SonarNormalizer follows the robust normalization introduced in
+    This SonarNormalizer follows the robust normalization introduced in
     https://arxiv.org/abs/2307.05445.
 
     Quoting from the paper: "Due to the very long-tailed feature distribution, typical mean and standard deviation statistics will be

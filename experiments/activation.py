@@ -1,7 +1,21 @@
 from enum import Enum
-from typing import Self
+from typing import Literal, Self
 
 import torch.nn as nn
+
+
+ActivationTypeLiteral = Literal[
+    "relu",
+    "tanh",
+    "elu",
+    "leaky_relu",
+    "prelu",
+    "selu",
+    "silu",
+    "softsign",
+    "sigmoid",
+    "hardsigmoid",
+]
 
 
 class ActivationEnum(Enum):

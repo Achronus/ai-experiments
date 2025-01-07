@@ -3,120 +3,58 @@ import torch.nn as nn
 
 from pydantic.dataclasses import dataclass
 
-from experiments import Device, Dtype, ActivationEnum
-from experiments.sonar import SonarNormalizer, SonarNormalizerConfig
+from experiments import Device, Dtype
+from experiments.linear import LinearProjectionConfig, LinearProjection
+from experiments.sonar import SonarNormalizer
 
 
 @dataclass
-class LinearProjectionConfig:
+class BaseLCMConfig:
     """
-    A data model containing config parameters for the LinearProjection layer.
+    A data model containing config parameters for the Base-LCM module.
 
     Args:
-        in_features (int): the number of input features (sonar_dim)
-        out_features (int): the number of output features (model_dim)
-        activation (str | ActivationEnum): the type of activation function
-        weight_norm (bool, optional): a flag to normalize the layers weights. Default is False
+        norm (SonarNormalizer): a SonarNormalizer fit to a set of embeddings
+        prenet_config (LinearProjectConfig): a model containing the PreNet layer config settings
+        postnet_config (LinearProjectConfig): a model containing the PostNet layer config settings
     """
 
-    in_features: int
-    out_features: int
-    activation: str | ActivationEnum
-    weight_norm: bool = False
+    norm: SonarNormalizer
+    prenet_config: LinearProjectionConfig
+    postnet_config: LinearProjectionConfig
 
 
-class LinearProjection(nn.Module):
+class BaseLCM(nn.Module):
     """
-    A Linear projection layer used in the Base-LCM architecture.
+    A Base-LCM architecture as described in this paper: https://arxiv.org/pdf/2412.08821.
 
     Args:
-        config (LinearProjectionConfig): a model containing the layers configuration settings
+        config (BaseLCMConfig): a model containing the modules configuration settings
         dtype (torch.dtype, optional): a custom torch datatype for all tensors. Default is None
         device (torch.device, optional): the compute device to load tensors onto. Default is None
     """
 
     def __init__(
         self,
-        config: LinearProjectionConfig,
+        config: BaseLCMConfig,
         dtype: Dtype | None = None,
         device: Device | None = None,
     ) -> None:
         super().__init__()
 
-        linear = nn.Linear(
-            config.in_features,
-            config.out_features,
-            dtype=dtype,
-            device=device,
-        )
+        self.config = config
 
-        self.fc = (
-            torch.nn.utils.parametrizations.weight_norm(linear)
-            if config.weight_norm
-            else linear
-        )
-        self.activation_fn = ActivationEnum.get(config.activation)
+        self.prenet = LinearProjection(config.prenet_config, dtype, device)
+        self.postnet = LinearProjection(config.postnet_config, dtype, device)
+        self.norm = config.norm
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        if not self.norm._is_fitted:
+            raise RuntimeError(
+                "The normalizer must be `fit` to a set of embeddings first!"
+            )
+
+    def forward(self, embeddings: torch.Tensor) -> torch.Tensor:
         """Forward pass through the network."""
-        return self.activation_fn(self.fc(x))
-
-
-class PreNet(nn.Module):
-    """
-    A PreNet module for the Base-LCM architecture.
-
-    Args:
-        config (LinearProjectionConfig): a model containing the layers configuration settings
-        dtype (torch.dtype, optional): a custom torch datatype for all tensors. Default is None
-        device (torch.device, optional): the compute device to load tensors onto. Default is None
-    """
-
-    def __init__(
-        self,
-        config: LinearProjectionConfig,
-        dtype: Dtype | None = None,
-        device: Device | None = None,
-    ) -> None:
-        super().__init__()
-
-        self.fc = LinearProjection(config, dtype, device)
-        self.norm = SonarNormalizer(
-            SonarNormalizerConfig(dim=config.out_features),
-            dtype=dtype,
-            device=device,
-        )
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Forward pass through the network."""
-        return self.fc(self.norm.normalize(x))
-
-
-class PostNet(nn.Module):
-    """
-    A PostNet module for the Base-LCM architecture.
-
-    Args:
-        config (LinearProjectionConfig): a model containing the layers configuration settings
-        dtype (torch.dtype, optional): a custom torch datatype for all tensors. Default is None
-        device (torch.device, optional): the compute device to load tensors onto. Default is None
-    """
-
-    def __init__(
-        self,
-        config: LinearProjectionConfig,
-        dtype: Dtype | None = None,
-        device: Device | None = None,
-    ) -> None:
-        super().__init__()
-
-        self.fc = LinearProjection(config, dtype, device)
-        self.norm = SonarNormalizer(
-            SonarNormalizerConfig(dim=config.out_features),
-            dtype=dtype,
-            device=device,
-        )
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Forward pass through the network."""
-        return self.norm.denormalize(self.fc(x))
+        pre_embeds = self.prenet(self.norm.normalize(embeddings))
+        x = pre_embeds  # Update with decoder
+        return self.norm.denormalize(self.postnet(x))

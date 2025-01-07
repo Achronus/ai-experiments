@@ -2,6 +2,7 @@ from typing import Literal
 
 import torch
 import torch.nn as nn
+import numpy as np
 
 from pydantic.dataclasses import dataclass
 
@@ -98,6 +99,8 @@ class SonarNormalizer(nn.Module, FFTInterface):
         self.dtype = dtype
         self.device = device
 
+        self._is_fitted = False
+
         self.register_buffer(
             "center", torch.zeros(self.config.dim, dtype=self.dtype, device=self.device)
         )
@@ -116,6 +119,9 @@ class SonarNormalizer(nn.Module, FFTInterface):
             )
 
     def normalize(self, x: torch.Tensor) -> torch.Tensor:
+        if not self._is_fitted:
+            raise RuntimeError("The `fit` method must be called first.")
+
         if self.config.with_fft:
             x = self.fft_transform(x)
 
@@ -126,6 +132,9 @@ class SonarNormalizer(nn.Module, FFTInterface):
         return x
 
     def denormalize(self, x: torch.Tensor) -> torch.Tensor:
+        if not self._is_fitted:
+            raise RuntimeError("The `fit` method must be called first.")
+
         if self.config.clip_proba is not None:
             x = torch.clamp(x, min=self.clip_min, max=self.clip_max)
 
@@ -135,14 +144,15 @@ class SonarNormalizer(nn.Module, FFTInterface):
             x = self.fft_inverse_transform(x)
         return x
 
-    def quantile(self, x: torch.Tensor, q: float, clip_t: torch.Tensor) -> torch.Tensor:
-        """A helper method to compute the quantile tensors."""
-        return torch.quantile(torch.tensor(x), q=q, dim=0).to(
+    def _quantile(self, x: np.ndarray, q: float, clip_t: torch.Tensor) -> torch.Tensor:
+        """A helper method to compute the quantile tensors used in the `fit()` method."""
+        return torch.quantile(torch.from_numpy(x), q=q, dim=0).to(
             dtype=clip_t.dtype, device=clip_t.device
         )
 
     @torch.no_grad()
     def fit(self, x: torch.Tensor) -> None:
+        """Fits the normalizer to the data and calculates preliminary values."""
         if self.config.norm_method in ["robust", "gaussian_robust"]:
             from sklearn.preprocessing import RobustScaler
 
@@ -161,12 +171,12 @@ class SonarNormalizer(nn.Module, FFTInterface):
         if self.config.with_fft:
             x = self.fft_transform(x)
 
-        x = _scaler.fit_transform(x.cpu().float().numpy())
+        x: np.ndarray = _scaler.fit_transform(x.cpu().float().numpy())
 
-        _center = (
+        _center: np.ndarray = (
             _scaler.mean_ if self.config.norm_method == "standard" else _scaler.center_
         )
-        _scale = _scaler.scale_
+        _scale: np.ndarray = _scaler.scale_
 
         self.center[:] = torch.tensor(
             _center,
@@ -181,9 +191,11 @@ class SonarNormalizer(nn.Module, FFTInterface):
         )
 
         if self.config.clip_proba is not None:
-            self.clip_min[:] = self.quantile(x, self.config.clip_proba, self.clip_min)
-            self.clip_max[:] = self.quantile(
+            self.clip_min[:] = self._quantile(x, self.config.clip_proba, self.clip_min)
+            self.clip_max[:] = self._quantile(
                 x,
                 1 - self.config.clip_proba,
                 self.clip_max,
             )
+
+        self._is_fitted = True

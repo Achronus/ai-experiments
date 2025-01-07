@@ -7,6 +7,7 @@ import torch.nn as nn
 from pydantic.dataclasses import dataclass
 
 from experiments import Device, Dtype
+from experiments.sonar import SonarNormalizer, SonarNormalizerConfig
 
 
 class ActivationEnum(Enum):
@@ -109,7 +110,11 @@ class PreNet(nn.Module):
         super().__init__()
 
         self.fc = LinearProjection(config, dtype, device)
-        self.norm = nn.LayerNorm(config.out_features, dtype=dtype, device=device)
+        self.norm = SonarNormalizer(
+            SonarNormalizerConfig(dim=config.out_features),
+            dtype=dtype,
+            device=device,
+        )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass through the network."""
@@ -136,7 +141,11 @@ class PostNet(nn.Module):
         super().__init__()
 
         self.fc = LinearProjection(config, dtype, device)
-        self.norm = nn.LayerNorm(config.out_features, dtype=dtype, device=device)
+        self.norm = SonarNormalizer(
+            SonarNormalizerConfig(dim=config.out_features),
+            dtype=dtype,
+            device=device,
+        )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass through the network."""

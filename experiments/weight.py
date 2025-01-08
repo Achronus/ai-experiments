@@ -1,9 +1,8 @@
 from typing import Callable, Literal
 import math
 
+from pydantic import validate_call
 import torch.nn as nn
-
-from experiments.linear import Linear
 
 
 WeightInitLiteral = Literal[
@@ -15,6 +14,7 @@ WeightInitLiteral = Literal[
 ]
 
 
+@validate_call()
 def get_init_fn(style: WeightInitLiteral | None) -> Callable | None:
     """Retrieve a weight initialization function based on a given style."""
     if style is None:
@@ -31,7 +31,7 @@ def get_init_fn(style: WeightInitLiteral | None) -> Callable | None:
     return mapping[style]
 
 
-def init_linear_xavier(layer: Linear) -> None:
+def init_linear_xavier(layer: nn.Module) -> None:
     """Performs Xavier weight initialization as described in this paper: https://proceedings.mlr.press/v9/glorot10a.html."""
     nn.init.xavier_normal(layer.weight)
 
@@ -39,7 +39,7 @@ def init_linear_xavier(layer: Linear) -> None:
         nn.init.zeros_(layer.bias)
 
 
-def init_linear_sonar(layer: Linear, sonar_std: float = 0.006) -> None:
+def init_linear_sonar(layer: nn.Module, sonar_std: float = 0.006) -> None:
     """Performs SONAR weight initialization as described in this paper: https://arxiv.org/abs/2308.11466."""
     std = sonar_std * (3 / layer.in_features) ** 0.5
     nn.init.uniform(layer.weight, a=-std, b=std)
@@ -48,7 +48,7 @@ def init_linear_sonar(layer: Linear, sonar_std: float = 0.006) -> None:
         nn.init.zeros_(layer.bias)
 
 
-def init_linear_zero(layer: Linear) -> None:
+def init_linear_zero(layer: nn.Module) -> None:
     """Performs ZerO weight initialization as described in this paper: https://arxiv.org/abs/2110.12661."""
     nn.init.zeros_(layer.weight)
 
@@ -56,7 +56,7 @@ def init_linear_zero(layer: Linear) -> None:
         nn.init.zeros_(layer.bias)
 
 
-def init_linear_trunc_normal(layer: Linear) -> None:
+def init_linear_trunc_normal(layer: nn.Module) -> None:
     """Performs Truncated Normal weight initialization."""
     nn.init.trunc_normal_(layer.weight, std=1e-3)
 
@@ -64,7 +64,7 @@ def init_linear_trunc_normal(layer: Linear) -> None:
         nn.init.zeros_(layer.bias)
 
 
-def init_linear_kaiming_uniform(layer: Linear) -> None:
+def init_linear_kaiming_uniform(layer: nn.Module) -> None:
     """Performs Kaiming Uniform weight initialization as described in this paper: https://arxiv.org/abs/1502.01852."""
     nn.init.kaiming_uniform_(layer.weight, a=math.sqrt(5))
 

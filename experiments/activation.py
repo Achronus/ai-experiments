@@ -34,7 +34,7 @@ class ActivationEnum(Enum):
 
     @classmethod
     def get(cls, name: str | Self) -> nn.Module:
-        """Get the activation function."""
+        """Get the `torch.nn` activation function."""
         if isinstance(name, cls):
             return name.value
         try:

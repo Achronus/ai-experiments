@@ -1,9 +1,11 @@
 from experiments.linear.base import Linear
-from experiments.linear.projection import LinearProjection, LinearProjectionConfig
+from experiments.linear.projection import LinearProjection
+from experiments.linear.ffn import FeedForwardNetwork, GLUFeedForwardNetwork
 
 
 __all__ = [
     "Linear",
     "LinearProjection",
-    "LinearProjectionConfig",
+    "FeedForwardNetwork",
+    "GLUFeedForwardNetwork",
 ]

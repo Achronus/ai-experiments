@@ -1,6 +1,8 @@
 import torch
 
 from experiments.activation import ActivationEnum, ActivationTypeLiteral
+from experiments.normalize import LayerNormLiteral, LayerNorm
+from experiments.weight import WeightInitLiteral, get_init_fn
 
 
 Dtype = torch.dtype
@@ -13,4 +15,8 @@ Device = torch.device
 __all__ = [
     "ActivationEnum",
     "ActivationTypeLiteral",
+    "LayerNormLiteral",
+    "LayerNorm",
+    "WeightInitLiteral",
+    "get_init_fn",
 ]

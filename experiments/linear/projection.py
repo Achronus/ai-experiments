@@ -1,29 +1,9 @@
 import torch
 import torch.nn as nn
 
-from pydantic.dataclasses import dataclass
-
 from experiments import Device, Dtype, ActivationEnum, ActivationTypeLiteral
 from experiments.linear import Linear
 from experiments.weight import WeightInitLiteral, get_init_fn
-
-
-@dataclass
-class LinearProjectionConfig:
-    """
-    A data model containing config parameters for the LinearProjection layer.
-
-    Args:
-        bias (bool, optional): a flag to enable layer bias terms. Default is True
-        weight_norm (bool, optional): a flag to normalize the layers weights. Default is False
-        weight_init_fn (WeightInitLiteral | None, optional): the type of weight initialization to use. Default is "kaiming_uniform"
-        activation (ActivationTypeLiteral | None, optional): the type of activation function. Default is None
-    """
-
-    bias: bool = True
-    weight_norm: bool = False
-    weight_init_fn: WeightInitLiteral | None = "kaiming_uniform"
-    activation: ActivationTypeLiteral | None = None
 
 
 class LinearProjection(nn.Module):
@@ -34,7 +14,10 @@ class LinearProjection(nn.Module):
     Args:
         in_features (int): the number of input features
         out_features (int): the number of output features
-        config (LinearProjectionConfig): configuration settings for the layer
+        bias (bool, optional): a flag to enable layer bias terms. Default is True
+        weight_norm (bool, optional): a flag to normalize the layers weights. Default is False
+        weight_init_fn (WeightInitLiteral | None, optional): the type of weight initialization to use. Default is "kaiming_uniform"
+        activation (ActivationTypeLiteral | None, optional): the type of activation function. Default is None
         dtype (torch.dtype, optional): a custom torch datatype for all tensors. Default is None
         device (torch.device, optional): the compute device to load tensors onto. Default is None
     """
@@ -47,7 +30,11 @@ class LinearProjection(nn.Module):
         self,
         in_features: int,
         out_features: int,
-        config: LinearProjectionConfig,
+        bias: bool = True,
+        weight_norm: bool = False,
+        weight_init_fn: WeightInitLiteral | None = "kaiming_uniform",
+        activation: ActivationTypeLiteral | None = None,
+        *,
         dtype: Dtype | None = None,
         device: Device | None = None,
     ) -> None:
@@ -55,30 +42,30 @@ class LinearProjection(nn.Module):
 
         self.in_features = in_features
         self.out_features = out_features
-        self.config = config
+
         self.dtype = dtype
         self.device = device
 
-        self.init_fn = get_init_fn(config.weight_init_fn)
+        self.init_fn = get_init_fn(weight_init_fn)
         linear = Linear(
             in_features,
             out_features,
-            bias=config.bias,
-            init_fn=config.weight_init_fn,
+            bias=bias,
+            init_fn=weight_init_fn,
             dtype=dtype,
             device=device,
         )
 
         self.fc = (
             torch.nn.utils.parametrizations.weight_norm(linear)
-            if config.weight_norm
+            if weight_norm
             else linear
         )
 
-        if config.activation is not None:
+        if activation is not None:
             # Some activation functions have parameters (e.g., PReLU)
             # so need to load on device
-            self.activation_fn = ActivationEnum.get(config.activation).to(device)
+            self.activation_fn = ActivationEnum.get(activation).to(device)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass through the network."""

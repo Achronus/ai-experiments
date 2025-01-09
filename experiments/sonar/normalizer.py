@@ -86,6 +86,11 @@ class SonarNormalizer(nn.Module, FFTInterface):
         device (torch.device, optional): the compute device to load tensors onto. Default is None
     """
 
+    center: torch.Tensor
+    scale: torch.Tensor
+    clip_min: torch.Tensor
+    clip_max: torch.Tensor
+
     def __init__(
         self,
         config: SonarNormalizerConfig,

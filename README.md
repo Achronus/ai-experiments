@@ -10,13 +10,18 @@ My goal is to help push development for more efficient, high-performing, autonom
 
 A full breakdown of experiments are listed below:
 
-- **Large Concept Models** - _(in progress)_
+- **GLU Feed-Forward Networks**
+
+    [![Project](https://img.shields.io/badge/Project-blue?style=for-the-badge&logo=python&logoColor=white)](/experiments/glu/) [![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@achronus/glu-a-simple-transformer-improvement-504e31c4252a)
+
+- **Rotary Positional Encoding** - _(In progress)_
+- **Diffusion Models** - _(coming soon)_
+- **Large Concept Models** - _(coming soon)_
+- **Multi-modal Vision Transformer** - _(coming soon)_
 - **Dino** - _(coming soon)_
 - **I-JEPA** - _(coming soon)_
 - **V-JEPA** - _(coming soon)_
-- **SONAR** - _(coming soon)_
-- **Multi-modal Vision Transformer** - _(coming soon)_
-- And more to come...
+- And more...
 
 <!-- 
 - Joint-embedding architectures

@@ -1,7 +1,9 @@
 # Gated Linear Units (GLU)
 
-This repository houses the model for the GLU Feed-Forward network found in this blog post:
+Welcome to the `glu` directory! Here you'll find files related to my article about GLUs.
 
 [![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@achronus/glu-a-simple-transformer-improvement-504e31c4252a)
 
-It's a single `PyTorch` module found in the `model.py` file. Feel free to explore it and use it in your own projects!
+Here's a breakdown of each file:
+
+- `model.py` - contains the GLU-FFN `torch.nn` module discussed in the article

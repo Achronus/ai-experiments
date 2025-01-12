@@ -1,0 +1,59 @@
+lcm:
+  max_seq_len: 4096
+  d_model: 2048
+  n_attn_heads: 16
+  n_layers: 32
+
+  positional:
+    style: rope
+
+  prenet:
+    ?
+
+  decoder:
+    n_hidden: 8192  # d_model * 4
+    dropout: 0.1
+    norm_type: rms
+    use_swiglu: True
+
+  postnet:
+    bias: True
+    weight_norm: False
+    weight_init_fn: kaiming_uniform
+    activation: None
+
+# lcm/models/base_lcm/archs.py
+# 1.6B model
+lcm:
+  max_seq_len: 4096
+  d_model: 2048  # n_hidden
+  n_attn_heads: 16
+  sonar_embed_dim: 1024
+  
+  prenet:
+    dropout_p: 0.0
+    linear_bias: True
+    linear_init_fn: kaiming_uniform
+    weight_normalization: False
+    scale_embeddings: False  # Unique
+    embedding_std: 0.006  # Unique
+
+  decoder:
+    final_dropout_p: 0.0
+    attention_dropout_p: 0.0
+    dropout_p: 0.1
+    mha_output_proj_bias: True
+    ffn_inner_dim: d_model * 4
+    n_attn_heads: n_attn_heads
+    num_layers: 32
+    pos_embed_style: rope
+    use_swiglu: True
+    layer_norm_style: rms
+
+  postnet:
+    dropout_p: 0.0
+    linear_bias: True
+    linear_init_fn: kaiming_uniform
+    weight_normalization: False
+    layer_norm_style: standard  # Unique
+    activation

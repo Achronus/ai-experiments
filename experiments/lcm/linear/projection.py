@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 from experiments import Device, Dtype, ActivationEnum, ActivationTypeLiteral
-from experiments.linear import Linear
+from experiments.lcm.linear import Linear
 from experiments.weight import WeightInitLiteral, get_init_fn
 
 

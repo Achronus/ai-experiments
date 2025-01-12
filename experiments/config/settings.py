@@ -10,7 +10,7 @@ from pydantic_settings import (
 )
 
 from experiments.config import LCMSettings
-from experiments.sonar import SonarNormalizerConfig
+from experiments.lcm.sonar import SonarNormalizerConfig
 
 
 class ExperimentConfig(BaseSettings):

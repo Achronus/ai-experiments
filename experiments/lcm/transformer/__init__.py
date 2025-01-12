@@ -1,4 +1,4 @@
-from experiments.transformer.decoder import (
+from experiments.lcm.transformer.decoder import (
     DecoderOnlyLayer,
     DecoderOnlyLayerConfig,
     TransformerDecoder,

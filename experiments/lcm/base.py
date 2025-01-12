@@ -3,8 +3,8 @@ import torch.nn as nn
 
 from experiments import Device, Dtype
 from experiments.config import LCMSettings
-from experiments.linear import LinearProjection
-from experiments.sonar import SonarNormalizer
+from experiments.lcm.linear import LinearProjection
+from experiments.lcm.sonar import SonarNormalizer
 
 
 class BaseLCM(nn.Module):
@@ -29,8 +29,14 @@ class BaseLCM(nn.Module):
 
         self.config = config
 
-        self.prenet = LinearProjection(config.prenet, dtype, device)
-        self.postnet = LinearProjection(config.postnet, dtype, device)
+        self.prenet = PreNet(config.prenet, dtype, device)
+        self.postnet = LinearProjection(
+            in_features,
+            out_features,
+            config.postnet,
+            dtype,
+            device,
+        )
         self.norm = norm
 
         if not self.norm._is_fitted:

@@ -6,7 +6,9 @@ This repository is a step towards countering that. It houses a collection of imp
 
 Each item is separated into a folder with a set of respective Python files. Some utility methods, such as activation functions, are stored in the root of the experiments folder for easier access to all individual experiments. Each folder has a corresponding `README.md` file highlighting a brief description of the development and structure.
 
-My goal is to help push development for more efficient, high-performing, autonomous systems that improve the way we live our lives. All code will remain open-source and hopefully be an asset to the AI community. Happy reading and exploring! 😄
+My goal is to help push development for more efficient, high-performing, autonomous systems that improve the way we live our lives. All code will remain open-source and hopefully be an asset to the AI community.
+
+Happy reading and exploring! 😄
 
 ## Experiments
 

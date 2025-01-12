@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 
 
-from experiments.linear import Linear
+from experiments.lcm.linear import Linear
 from experiments import (
     Dtype,
     Device,

@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 
 from experiments import Device
-from experiments.padding import PaddingMask
+from experiments.lcm.padding import PaddingMask
 
 
 class PositionEncoder(nn.Module):

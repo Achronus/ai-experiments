@@ -9,7 +9,7 @@ from pydantic_settings import (
     YamlConfigSettingsSource,
 )
 
-from experiments.config import LCMSettings
+from experiments.lcm.config import LCMSettings
 from experiments.lcm.sonar import SonarNormalizerConfig
 
 

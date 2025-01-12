@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 from experiments import Device, Dtype
-from experiments.config import LCMSettings
+from experiments.lcm.config import LCMSettings
 from experiments.lcm.linear import LinearProjection
 from experiments.lcm.sonar import SonarNormalizer
 

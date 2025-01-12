@@ -1,4 +1,4 @@
-from experiments.config import ExperimentConfig
+from experiments.lcm.config import ExperimentConfig
 from experiments.lcm.sonar import SonarNormalizer
 from experiments.lcm import BaseLCM
 from experiments.lcm.transformer import TransformerDecoder, DecoderOnlyLayer

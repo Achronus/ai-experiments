@@ -19,14 +19,10 @@ Happy reading and exploring! 😄
 | Item          | Project Link | Article Link |
 |---------------|--------------|--------------|
 | GLU Feed-Forward Networks | [![Project](https://img.shields.io/badge/Project-blue?style=for-the-badge&logo=python&logoColor=white)](/experiments/glu/) | [![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@achronus/glu-a-simple-transformer-improvement-504e31c4252a) |
-| Rotary Positional Encoding | - | In progress |
-| Diffusion Models | - | Coming Soon |
-| Large Concept Models | - | Coming Soon |
+| Titans | - | [![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@achronus/titans-where-tokens-almost-live-forever-c995d9a84e0e) |
+| SAM 2 | - | Coming Soon |
 | Multi-Modal Transformer | - | Coming Soon |
-| Dino | - | Coming Soon |
-| NeRF | - | Coming Soon |
-| I-JEPA | - | Coming Soon |
-| V-JEPA | - | Coming Soon |
+| Large Concept Models | - | Coming Soon |
 
 <!-- 
 - Joint-embedding architectures

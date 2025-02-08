@@ -20,9 +20,7 @@ Happy reading and exploring! 😄
 |---------------|--------------|--------------|
 | GLU Feed-Forward Networks | [![Project](https://img.shields.io/badge/Project-blue?style=for-the-badge&logo=python&logoColor=white)](/experiments/glu/) | [![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@achronus/glu-a-simple-transformer-improvement-504e31c4252a) |
 | Titans | - | [![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@achronus/titans-where-tokens-almost-live-forever-c995d9a84e0e) |
-| SAM 2 | - | Coming Soon |
-| Multi-Modal Transformer | - | Coming Soon |
-| Large Concept Models | - | Coming Soon |
+| Liquid Neural Networks | [![Project](https://img.shields.io/badge/Project-blue?style=for-the-badge&logo=python&logoColor=white)](/experiments/lnn/) | _In progress_ |
 
 <!-- 
 - Joint-embedding architectures

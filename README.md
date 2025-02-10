@@ -20,7 +20,7 @@ Happy reading and exploring! 😄
 |---------------|--------------|--------------|
 | GLU Feed-Forward Networks | [![Project](https://img.shields.io/badge/Project-blue?style=for-the-badge&logo=python&logoColor=white)](/experiments/glu/) | [![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@achronus/glu-a-simple-transformer-improvement-504e31c4252a) |
 | Titans | - | [![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@achronus/titans-where-tokens-almost-live-forever-c995d9a84e0e) |
-| Liquid Neural Networks | [![Project](https://img.shields.io/badge/Project-blue?style=for-the-badge&logo=python&logoColor=white)](/experiments/lnn/) | _In progress_ |
+| Liquid Neural Networks | [![Project](https://img.shields.io/badge/Project-blue?style=for-the-badge&logo=python&logoColor=white)](/experiments/lnn/) | [![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@achronus/ltcs-with-ncps-an-alternative-to-large-ai-models-6c71729bd3d6) |
 
 <!-- 
 - Joint-embedding architectures
